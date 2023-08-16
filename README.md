@@ -1,0 +1,1 @@
+I'm learning how to write Ethereum smart-contracts using Solidity.
