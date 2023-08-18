@@ -28,6 +28,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    - run: npm install ethereum-waffle
     - run: npm ci
     - run: npx hardhat compile
     - run: npx hardhat test
