@@ -6,7 +6,6 @@ contract TransactionContract {
     event Payout(address _to, uint256 amount);
     event Deposit(address _from, uint256 amount);
     event Vote(address _voter);
-
     // Voting
     mapping(address => bool) voted;
     uint256 votes;
@@ -57,11 +56,21 @@ contract TransactionContract {
     function payout() external onlyOwner {
         require(votes >= required, "Not enough votes");
         require(address(this).balance >= amount, "Not enough funds to payout");
-        _to.transfer(amount);
+
+        (bool success, ) = _to.call{value: amount}("");
+        require(success, "Transfer failed");
         emit Payout(_to, amount);
     }
 
     function deposit() external payable {
         emit Deposit(msg.sender, msg.value);
+    }
+
+    function getVotes() external view returns (uint256) {
+        return votes;
+    }
+
+    function getBalance() external view returns (uint256) {
+        return address(this).balance;
     }
 }
